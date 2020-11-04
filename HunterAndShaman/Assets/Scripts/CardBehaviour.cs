@@ -11,7 +11,7 @@ public class CardBehaviour : MonoBehaviour
     public Sprite backSprite;
     public Sprite frontSprite;
 
-    float timeOfMoving = 0.5f;
+    public static float timeOfMoving = 0.5f;
 
 
     private void Start()
@@ -19,6 +19,15 @@ public class CardBehaviour : MonoBehaviour
         cardImage = GetComponent<Image>();
         isFlipped = false;
         cardImage.sprite = backSprite;
+    }
+
+
+    private void Update()
+    {
+        if (transform.position.x < -Screen.width / 2)
+        {
+            Destroy(gameObject);
+        }
     }
 
 
@@ -69,7 +78,13 @@ public class CardBehaviour : MonoBehaviour
     }
 
 
-    void RotateTo(Quaternion newRot, float seconds)
+    public void RotateTo(Quaternion newRot)
+    {
+        StartCoroutine(SmoothRotation(transform.rotation, newRot, timeOfMoving));
+    }
+
+
+    public void RotateTo(Quaternion newRot, float seconds)
     {
         StartCoroutine(SmoothRotation(transform.rotation, newRot, seconds));
     }

@@ -21,11 +21,12 @@ public class ChangeRolesDeck : MonoBehaviour
     private void Start()
     {
         cards = new CardBehaviour[DECK_SIZE];
-        SpawnDeck();
     }
 
-    void SpawnDeck()
+    public void SpawnDeck()
     {
+        curr_card = 0;
+
         for (int i = 0; i < cards.Length; i++)
         {
             CardBehaviour obj;
@@ -38,17 +39,17 @@ public class ChangeRolesDeck : MonoBehaviour
         }
     }
 
-    public void DrawCard()
+    public CardBehaviour DrawCard(Vector3 pos)
     {
         if (curr_card >= DECK_SIZE)
         {
-            return;
+            return null;
         }
 
-        cards[DECK_SIZE - curr_card - 1].MoveCardTo(new Vector3(840.0f, 300.0f, 0.0f));
-        cards[DECK_SIZE - curr_card - 1].FlipCard();
+        cards[DECK_SIZE - curr_card - 1].MoveCardTo(pos);
 
         curr_card++;
+        return cards[DECK_SIZE - curr_card];
     }
 
     public int HowManyCards()

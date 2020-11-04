@@ -15,19 +15,20 @@ public class MainDeck : MonoBehaviour
     bool[] cardPlacement;
     CardBehaviour[] cards;
 
+
     private void Awake()
     {
         if (deck == null)
             deck = this.gameObject.GetComponent<MainDeck>();
     }
 
+
     private void Start()
     {
         cardPlacement = new bool[DECK_SIZE];
         cards = new CardBehaviour[DECK_SIZE];
-        ShuffleDeck();
-        SpawnDeck();
     }
+
 
     void ShuffleDeck()
     {
@@ -49,8 +50,12 @@ public class MainDeck : MonoBehaviour
         }
     }
 
-    void SpawnDeck()
+
+    public void SpawnDeck()
     {
+        curr_card = 0;
+        ShuffleDeck();
+
         for (int i = 0; i < cards.Length; i++)
         {
             CardBehaviour obj;
@@ -70,18 +75,21 @@ public class MainDeck : MonoBehaviour
         }
     }
 
-    public void DrawCard()
+
+    public CardBehaviour DrawCard(Vector3 pos)
     {
         if (curr_card >= DECK_SIZE)
         {
-            return;
+            return null;
         }
 
-        cards[DECK_SIZE - curr_card - 1].MoveCardTo(new Vector3(540.0f, 300.0f, 0.0f));
-        cards[DECK_SIZE - curr_card - 1].FlipCard();
+        cards[DECK_SIZE - curr_card - 1].MoveCardTo(pos);
 
         curr_card++;
+        return cards[DECK_SIZE - curr_card];
+
     }
+
 
     public int HowManyCards()
     {
