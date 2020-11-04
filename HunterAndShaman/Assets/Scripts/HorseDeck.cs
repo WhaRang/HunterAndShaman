@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainDeck : MonoBehaviour
+public class HorseDeck : MonoBehaviour
 {
-    public static MainDeck deck;
+    public static HorseDeck deck;
+    public CardBehaviour redHorseCardPrefab;
+    public CardBehaviour blackHorseCardPrefab;
 
-    public CardBehaviour redCardPrefab;
-    public CardBehaviour blackCardPrefab;
-
-    const int DECK_SIZE = 24;
+    const int DECK_SIZE = 4;
     int curr_card = 0;
 
-    bool[] cardPlacement;
     CardBehaviour[] cards;
+    bool[] cardPlacement;
+
 
     private void Awake()
     {
         if (deck == null)
-            deck = this.gameObject.GetComponent<MainDeck>();
+            deck = this.gameObject.GetComponent<HorseDeck>();
     }
+
 
     private void Start()
     {
@@ -56,11 +57,11 @@ public class MainDeck : MonoBehaviour
             CardBehaviour obj;
             if (cardPlacement[i])
             {
-                obj = Instantiate(redCardPrefab);
+                obj = Instantiate(redHorseCardPrefab);
             }
             else
             {
-                obj = Instantiate(blackCardPrefab);
+                obj = Instantiate(blackHorseCardPrefab);
             }
             obj.transform.position = transform.position;
             obj.transform.rotation = transform.rotation;
@@ -70,6 +71,7 @@ public class MainDeck : MonoBehaviour
         }
     }
 
+
     public void DrawCard()
     {
         if (curr_card >= DECK_SIZE)
@@ -77,11 +79,12 @@ public class MainDeck : MonoBehaviour
             return;
         }
 
-        cards[DECK_SIZE - curr_card - 1].MoveCardTo(new Vector3(540.0f, 300.0f, 0.0f));
+        cards[DECK_SIZE - curr_card - 1].MoveCardTo(new Vector3(540.0f, 1080.0f, 0.0f));
         cards[DECK_SIZE - curr_card - 1].FlipCard();
 
         curr_card++;
     }
+
 
     public int HowManyCards()
     {

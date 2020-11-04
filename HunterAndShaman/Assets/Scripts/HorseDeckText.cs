@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
-public class MainDeckText : MonoBehaviour
+public class HorseDeckText : MonoBehaviour
 {
     Text textField;
 
@@ -15,6 +15,6 @@ public class MainDeckText : MonoBehaviour
 
     private void Update()
     {
-        textField.text = "" + MainDeck.deck.HowManyCards();
+        textField.text = "" + HorseDeck.deck.HowManyCards();
     }
 }

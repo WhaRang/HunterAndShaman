@@ -11,7 +11,7 @@ public class CardBehaviour : MonoBehaviour
     public Sprite backSprite;
     public Sprite frontSprite;
 
-    float timeOfMoving = 1.0f;
+    float timeOfMoving = 0.5f;
 
 
     private void Start()
