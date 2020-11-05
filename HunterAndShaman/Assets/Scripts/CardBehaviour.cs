@@ -33,15 +33,21 @@ public class CardBehaviour : MonoBehaviour
 
     public void FlipCard()
     {
-        StartCoroutine(FlipCardCoroutine());
+        FlipCard(timeOfMoving);
     }
 
 
-    IEnumerator FlipCardCoroutine()
+    public void FlipCard(float flipTime)
     {
-        RotateTo(Quaternion.Euler(0.0f, 90.0f, 0.0f), timeOfMoving / 2);
+        StartCoroutine(FlipCardCoroutine(flipTime));
+    }
+
+
+    IEnumerator FlipCardCoroutine(float flipTime)
+    {
+        RotateTo(Quaternion.Euler(0.0f, 90.0f, 0.0f), flipTime / 2);
         yield return null;
-        yield return new WaitForSeconds(timeOfMoving / 2);
+        yield return new WaitForSeconds(flipTime / 2);
         if (isFlipped)
         {
             isFlipped = false;
@@ -52,8 +58,9 @@ public class CardBehaviour : MonoBehaviour
             isFlipped = true;
             cardImage.sprite = frontSprite;
         }
-        RotateTo(Quaternion.Euler(0.0f, 0.0f, 0.0f), timeOfMoving / 2);
+        RotateTo(Quaternion.Euler(0.0f, 0.0f, 0.0f), flipTime / 2);
     }
+
 
     public void MoveCardTo(Vector3 newPos)
     {
@@ -99,5 +106,11 @@ public class CardBehaviour : MonoBehaviour
             transform.rotation = Quaternion.Slerp(startRot, endRot, Mathf.SmoothStep(0f, 1f, t));
             yield return null;
         }
+    }
+
+
+    public bool IsFlipped()
+    {
+        return isFlipped;
     }
 }

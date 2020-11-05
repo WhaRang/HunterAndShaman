@@ -2,32 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClickStateMachine : MonoBehaviour
+public class GameStateMachine : MonoBehaviour
 {
+    public static GameStateMachine machine;
+
     public enum STAGE 
     {
         SPAWN_CARDS,
         DRAW_CARDS,
+        MIX_CARDS,
+        MOVES,
         DISCARD_CARDS,
     }
 
     public PlayersHand personsHand;
     public PlayersHand aiHand;
 
-    //const float DELTA_PAUSE = 0.1f;
+    const float DELTA_PAUSE = 0.5f;
 
     float pause;
     float counter;
 
-    bool canClick;
+    float singlePause;
+    float doublePause;
+
     STAGE curr_stage;
+
+    bool canMove;
+
+
+    private void Awake()
+    {
+        if (machine == null)
+            machine = this.gameObject.GetComponent<GameStateMachine>();
+    }
+
 
     private void Start()
     {
-        pause = CardBehaviour.timeOfMoving; //+ DELTA_PAUSE;
+        singlePause = CardBehaviour.timeOfMoving + DELTA_PAUSE;
+        doublePause = CardBehaviour.timeOfMoving + DELTA_PAUSE;
+        pause = singlePause;
         curr_stage = STAGE.SPAWN_CARDS;
-        canClick = true;
         counter = 0.0f;
+        canMove = true;
     }
 
 
@@ -37,19 +55,18 @@ public class ClickStateMachine : MonoBehaviour
         if (counter >= pause)
         {
             counter = 0.0f;
-            canClick = true;
+            ManageStage();
         }
     }
 
 
-    public void OnClick()
+    public void ManageStage()
     {
-        if (!canClick)
+        if (!canMove)
         {
             return;
         }
 
-        canClick = false;
         counter = 0.0f;
 
         switch (curr_stage)
@@ -63,10 +80,22 @@ public class ClickStateMachine : MonoBehaviour
             case STAGE.DRAW_CARDS:
                 {
                     DrawCardsForEveryone();
-                    curr_stage = STAGE.DISCARD_CARDS;
+                    curr_stage = STAGE.MIX_CARDS;
                     break;
                 }
-
+            case STAGE.MIX_CARDS:
+                {
+                    MixCards();
+                    curr_stage = STAGE.MOVES;
+                    break;
+                }
+            case STAGE.MOVES:
+                {
+                    MakeMoves();
+                    curr_stage = STAGE.DISCARD_CARDS;
+                    canMove = false;
+                    break;
+                }
             case STAGE.DISCARD_CARDS:
                 {
                     DiscardCardsForEveryone();
@@ -81,6 +110,20 @@ public class ClickStateMachine : MonoBehaviour
                     break;
                 }
         }
+    }
+
+
+    void MakeMoves()
+    {
+        MiddleActionManager.manager.StartAction();
+        aiHand.MakeAutoMove(true);
+        personsHand.MakeAutoMove(false);
+    }
+
+
+    void MixCards()
+    {
+        aiHand.MixCards();
     }
 
 
@@ -105,5 +148,17 @@ public class ClickStateMachine : MonoBehaviour
         personsHand.DiscardCards();
         aiHand.DiscardCards();
         HorseDeck.deck.DiscardCard();
+    }
+
+
+    public void StartMove()
+    {
+        canMove = true;
+    }
+
+
+    public void SetStage(STAGE newStage)
+    {
+        curr_stage = newStage;
     }
 }
