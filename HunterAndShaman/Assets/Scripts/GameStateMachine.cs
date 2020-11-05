@@ -19,6 +19,9 @@ public class GameStateMachine : MonoBehaviour
     public PlayersHand aiHand;
 
     const float DELTA_PAUSE = 0.5f;
+    const int TOTAL_ROUNDS = 4;
+
+    int curr_round = 1;
 
     float pause;
     float counter;
@@ -44,7 +47,7 @@ public class GameStateMachine : MonoBehaviour
         doublePause = CardBehaviour.timeOfMoving + DELTA_PAUSE;
         pause = singlePause;
         curr_stage = STAGE.SPAWN_CARDS;
-        counter = 0.0f;
+        counter = pause;
         canMove = true;
     }
 
@@ -91,22 +94,26 @@ public class GameStateMachine : MonoBehaviour
                 }
             case STAGE.MOVES:
                 {
-                    MakeMoves();
+                    MakeMoves();                    
                     curr_stage = STAGE.DISCARD_CARDS;
                     canMove = false;
                     break;
                 }
             case STAGE.DISCARD_CARDS:
                 {
-                    DiscardCardsForEveryone();
-                    if (MainDeck.deck.HowManyCards() > 0)
+                    if (curr_round < TOTAL_ROUNDS)
                     {
+                        HorseDeck.deck.DiscardCurrentCard();
+                        curr_round++;
                         curr_stage = STAGE.DRAW_CARDS;
+                        break;
                     }
                     else
                     {
-                        curr_stage = STAGE.SPAWN_CARDS;
+                        curr_round = 1;
                     }
+                    DiscardCardsForEveryone();
+                    curr_stage = STAGE.SPAWN_CARDS;
                     break;
                 }
         }
@@ -147,7 +154,9 @@ public class GameStateMachine : MonoBehaviour
     {
         personsHand.DiscardCards();
         aiHand.DiscardCards();
-        HorseDeck.deck.DiscardCard();
+        HorseDeck.deck.DiscardCurrentCard();
+        MainDeck.deck.DiscardAll();
+        ChangeRolesDeck.deck.DiscardAll();
     }
 
 

@@ -12,6 +12,8 @@ public class ChangeRolesDeck : MonoBehaviour
 
     CardBehaviour[] cards;
 
+    Vector3 spawningPos = new Vector3(730.0f, 120.0f, 0.0f);
+
     private void Awake()
     {
         if (deck == null)
@@ -29,24 +31,24 @@ public class ChangeRolesDeck : MonoBehaviour
 
         for (int i = 0; i < cards.Length; i++)
         {
-            CardBehaviour obj;
-            obj = Instantiate(changeRolesCardPrefab);
-            obj.transform.position = transform.position;
-            obj.transform.rotation = transform.rotation;
-            obj.transform.SetParent(transform);
+            CardBehaviour card;
+            card = Instantiate(changeRolesCardPrefab);
+            card.transform.position = spawningPos;
+            card.transform.rotation = transform.rotation;
+            card.transform.SetParent(transform);
 
-            cards[i] = obj;
+            card.MoveCardTo(transform.position);
+
+            cards[i] = card;
         }
     }
 
-    public CardBehaviour DrawCard(Vector3 pos)
+    public CardBehaviour DrawCard()
     {
         if (curr_card >= DECK_SIZE)
         {
             return null;
         }
-
-        cards[DECK_SIZE - curr_card - 1].MoveCardTo(pos);
 
         curr_card++;
         return cards[DECK_SIZE - curr_card];
@@ -55,5 +57,16 @@ public class ChangeRolesDeck : MonoBehaviour
     public int HowManyCards()
     {
         return DECK_SIZE - curr_card;
+    }
+
+    public void DiscardAll()
+    {
+        Vector3 descardingPos = transform.position;
+        descardingPos.x = -Screen.width;
+
+        for (int i = 0; i < DECK_SIZE - curr_card; i++)
+        {
+            cards[i].MoveCardTo(descardingPos);
+        }
     }
 }

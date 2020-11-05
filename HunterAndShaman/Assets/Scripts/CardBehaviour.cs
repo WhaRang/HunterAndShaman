@@ -24,7 +24,7 @@ public class CardBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < -Screen.width / 2)
+        if (transform.position.x < -Screen.width)
         {
             Destroy(gameObject);
         }

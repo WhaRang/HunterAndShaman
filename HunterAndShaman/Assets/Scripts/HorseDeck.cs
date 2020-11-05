@@ -14,6 +14,8 @@ public class HorseDeck : MonoBehaviour
     CardBehaviour[] cards;
     bool[] cardPlacement;
 
+    Vector3 spawningPos = new Vector3(-730.0f, 0.0f, 0.0f);
+
 
     private void Awake()
     {
@@ -27,6 +29,7 @@ public class HorseDeck : MonoBehaviour
         cardPlacement = new bool[DECK_SIZE];
         cards = new CardBehaviour[DECK_SIZE];
     }
+
 
     void ShuffleDeck()
     {
@@ -48,6 +51,7 @@ public class HorseDeck : MonoBehaviour
         }
     }
 
+
     public void SpawnDeck()
     {
         curr_card = 0;
@@ -55,20 +59,22 @@ public class HorseDeck : MonoBehaviour
 
         for (int i = 0; i < cards.Length; i++)
         {
-            CardBehaviour obj;
+            CardBehaviour card;
             if (cardPlacement[i])
             {
-                obj = Instantiate(redHorseCardPrefab);
+                card = Instantiate(redHorseCardPrefab);
             }
             else
             {
-                obj = Instantiate(blackHorseCardPrefab);
+                card = Instantiate(blackHorseCardPrefab);
             }
-            obj.transform.position = transform.position;
-            obj.transform.rotation = transform.rotation;
-            obj.transform.SetParent(transform);
+            card.transform.position = spawningPos;
+            card.transform.rotation = transform.rotation;
+            card.transform.SetParent(transform);
 
-            cards[i] = obj;
+            card.MoveCardTo(transform.position);
+
+            cards[i] = card;
         }
     }
 
@@ -87,7 +93,7 @@ public class HorseDeck : MonoBehaviour
     }
 
 
-    public void DiscardCard()
+    public void DiscardCurrentCard()
     {
         if (curr_card > DECK_SIZE)
         {

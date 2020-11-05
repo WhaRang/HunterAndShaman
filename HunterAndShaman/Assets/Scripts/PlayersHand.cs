@@ -186,19 +186,39 @@ public class PlayersHand : MonoBehaviour
 
     void DrawCardsOneByOne()
     {
-        firstCard = MainDeck.deck.DrawCard(firstCardPos);
-        secondCard = MainDeck.deck.DrawCard(secondCardPos);
-        thirdCard = MainDeck.deck.DrawCard(thirdCardPos);
-        changeRolesCard = ChangeRolesDeck.deck.DrawCard(changeRolesCardPos);
+        if (firstCard == null)
+        {
+            firstCard = MainDeck.deck.DrawCard();
+            firstCard.MoveCardTo(firstCardPos);
+        }
+        if (secondCard == null)
+        {
+            secondCard = MainDeck.deck.DrawCard();
+            secondCard.MoveCardTo(secondCardPos);
+        }
+        if (thirdCard == null)
+        {
+            thirdCard = MainDeck.deck.DrawCard();
+            thirdCard.MoveCardTo(thirdCardPos);
+        }
+        if (changeRolesCard == null)
+        {
+            changeRolesCard = ChangeRolesDeck.deck.DrawCard();
+            changeRolesCard.MoveCardTo(changeRolesCardPos);
+        }
     }
 
 
     void FlipCardsOneByOne()
     {
-        firstCard.FlipCard();
-        secondCard.FlipCard();
-        thirdCard.FlipCard();
-        changeRolesCard.FlipCard();
+        if (!firstCard.IsFlipped())
+            firstCard.FlipCard();
+        if (!secondCard.IsFlipped())
+            secondCard.FlipCard();
+        if (!thirdCard.IsFlipped())
+            thirdCard.FlipCard();
+        if (!changeRolesCard.IsFlipped())
+            changeRolesCard.FlipCard();
     }
 
 

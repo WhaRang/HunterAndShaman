@@ -15,6 +15,8 @@ public class MainDeck : MonoBehaviour
     bool[] cardPlacement;
     CardBehaviour[] cards;
 
+    Vector3 spawningPos = new Vector3(730.0f, -120.0f, 0.0f);
+
 
     private void Awake()
     {
@@ -58,41 +60,52 @@ public class MainDeck : MonoBehaviour
 
         for (int i = 0; i < cards.Length; i++)
         {
-            CardBehaviour obj;
+            CardBehaviour card;
             if (cardPlacement[i])
             {
-                obj = Instantiate(redCardPrefab);
+                card = Instantiate(redCardPrefab);
             }
             else
             {
-                obj = Instantiate(blackCardPrefab);
+                card = Instantiate(blackCardPrefab);
             }
-            obj.transform.position = transform.position;
-            obj.transform.rotation = transform.rotation;
-            obj.transform.SetParent(transform);
+            card.transform.position = spawningPos;
+            card.transform.rotation = transform.rotation;
+            card.transform.SetParent(transform);
 
-            cards[i] = obj;
+            card.MoveCardTo(transform.position);
+
+            cards[i] = card;
         }
     }
 
 
-    public CardBehaviour DrawCard(Vector3 pos)
+    public CardBehaviour DrawCard()
     {
         if (curr_card >= DECK_SIZE)
         {
             return null;
         }
 
-        cards[DECK_SIZE - curr_card - 1].MoveCardTo(pos);
-
         curr_card++;
         return cards[DECK_SIZE - curr_card];
-
     }
 
 
     public int HowManyCards()
     {
         return DECK_SIZE - curr_card;
+    }
+
+
+    public void DiscardAll()
+    {
+        Vector3 descardingPos = transform.position;
+        descardingPos.x = -Screen.width;
+
+        for (int i = 0; i < DECK_SIZE - curr_card; i ++)
+        {
+            cards[i].MoveCardTo(descardingPos);
+        }
     }
 }
