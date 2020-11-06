@@ -16,17 +16,37 @@ public class PlayersHand : MonoBehaviour
     CardBehaviour firstCard;
     CardBehaviour secondCard;
     CardBehaviour thirdCard;
-
     CardBehaviour changeRolesCard;
+
+    CardBehaviour cardToMove;
 
     public bool shouldFlip;
 
-    const float STD_DIFF = 1.0f;
+    const float STD_DIFF = 20.0f;
+    bool shouldWaitForChoosedCard;
 
 
     private void Start()
     {
+        shouldWaitForChoosedCard = false;
         SetCardPositionsY();
+    }
+
+
+    private void Update()
+    {
+        if (shouldWaitForChoosedCard)
+        {
+            cardToMove = WaitForChoosedCard();
+            if (cardToMove != null)
+            {
+                SetAllCardsClickableTo(false);
+                cardToMove.SetChoosed(false);
+
+                MiddleActionManager.manager.MakeMove(false, cardToMove);
+                shouldWaitForChoosedCard = false;
+            }
+        }
     }
 
 
@@ -34,12 +54,6 @@ public class PlayersHand : MonoBehaviour
     {
         DrawCardsOneByOne();
         InitializeAvailablePositions();
-
-        if (firstCard == null || secondCard == null ||
-            thirdCard == null || changeRolesCard == null)
-        {
-            return;
-        }
 
         if (shouldFlip)
         {
@@ -67,6 +81,13 @@ public class PlayersHand : MonoBehaviour
 
         if (changeRolesCard != null)
             changeRolesCard.MoveCardTo(discardingPos);
+    }
+
+
+    public void MakeMove()
+    {
+        SetAllCardsClickableTo(true);
+        shouldWaitForChoosedCard = true;
     }
 
 
@@ -105,7 +126,7 @@ public class PlayersHand : MonoBehaviour
 
         yield return new WaitForSeconds(CardBehaviour.timeOfMoving / 2);
 
-        MoveAllCardsToSpecifiedPositions(positions);
+        MoveAllCardsToSpecifiedPositions(randomPositions);
     }
 
 
@@ -242,8 +263,6 @@ public class PlayersHand : MonoBehaviour
 
     public static bool nearlyEqual(float a, float b, float epsilon)
     {
-        float absA = System.Math.Abs(a);
-        float absB = System.Math.Abs(b);
         float diff = System.Math.Abs(a - b);
 
         if (a == b)
@@ -252,7 +271,35 @@ public class PlayersHand : MonoBehaviour
         }
         else
         { 
-            return diff / (absA + absB) < epsilon;
+            return diff < epsilon;
         }
+    }
+
+
+    void SetAllCardsClickableTo(bool clickable)
+    {
+        if (firstCard != null)
+            firstCard.SetClickable(clickable);
+        if (secondCard != null)
+            secondCard.SetClickable(clickable);
+        if (thirdCard != null)
+            thirdCard.SetClickable(clickable);
+        if (changeRolesCard != null)
+            changeRolesCard.SetClickable(clickable);
+    }
+
+
+    CardBehaviour WaitForChoosedCard()
+    {           
+        if (firstCard != null && firstCard.IsChoosed() == true)        
+            return firstCard;            
+        if (secondCard != null && secondCard.IsChoosed() == true)        
+            return secondCard;            
+        if (thirdCard != null && thirdCard.IsChoosed() == true)        
+            return thirdCard;            
+        if (changeRolesCard != null && changeRolesCard.IsChoosed() == true)        
+            return changeRolesCard;
+
+        return null;
     }
 }

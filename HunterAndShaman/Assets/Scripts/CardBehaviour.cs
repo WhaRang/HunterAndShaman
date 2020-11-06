@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
@@ -7,6 +8,8 @@ public class CardBehaviour : MonoBehaviour
 {
     Image cardImage;
     bool isFlipped;
+    bool isChoosed;
+    bool isClickable;
 
     public Sprite backSprite;
     public Sprite frontSprite;
@@ -18,13 +21,15 @@ public class CardBehaviour : MonoBehaviour
     {
         cardImage = GetComponent<Image>();
         isFlipped = false;
+        isChoosed = false;
+        isClickable = false;
         cardImage.sprite = backSprite;
     }
 
 
     private void Update()
     {
-        if (transform.position.x < -Screen.width)
+        if (transform.position.x < -Screen.width * 0.75)
         {
             Destroy(gameObject);
         }
@@ -109,8 +114,38 @@ public class CardBehaviour : MonoBehaviour
     }
 
 
+    public void OnClick()
+    {
+        if (!isClickable)
+        {
+            return;
+        }
+
+        isClickable = false;
+        isChoosed = true;
+    }
+
+
     public bool IsFlipped()
     {
         return isFlipped;
+    }
+
+
+    public bool IsChoosed()
+    {
+        return isChoosed;
+    }
+
+
+    public void SetChoosed(bool choosed)
+    {
+        isChoosed = choosed;
+    }
+
+
+    public void SetClickable(bool clickable)
+    {
+        isClickable = clickable;
     }
 }

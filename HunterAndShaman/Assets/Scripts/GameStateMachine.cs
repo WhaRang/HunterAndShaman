@@ -124,7 +124,7 @@ public class GameStateMachine : MonoBehaviour
     {
         MiddleActionManager.manager.StartAction();
         aiHand.MakeAutoMove(true);
-        personsHand.MakeAutoMove(false);
+        personsHand.MakeMove();
     }
 
 
