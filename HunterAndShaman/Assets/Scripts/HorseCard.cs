@@ -86,4 +86,10 @@ public class HorseCard : MonoBehaviour
             health = MIN_HEALTH;
         }
     }
+
+
+    public CardBehaviour.CARD_COLOR GetColor()
+    {
+        return cardBehaviour.cardColor;
+    }
 }

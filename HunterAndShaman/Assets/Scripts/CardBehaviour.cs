@@ -32,7 +32,7 @@ public class CardBehaviour : MonoBehaviour
 
     public static float timeOfMoving = 0.5f;
 
-    const float PULSE_SKALER = 1.2f;
+    const float PULSE_SCALER = 1.2f;
 
 
     private void Start()
@@ -69,7 +69,6 @@ public class CardBehaviour : MonoBehaviour
     IEnumerator FlipCardCoroutine(float flipTime)
     {
         RotateTo(Quaternion.Euler(0.0f, 90.0f, 0.0f), flipTime / 2);
-        yield return null;
         yield return new WaitForSeconds(flipTime / 2);
         if (isFlipped)
         {
@@ -87,48 +86,24 @@ public class CardBehaviour : MonoBehaviour
 
     public void MoveCardTo(Vector3 newPos)
     {
-        StartCoroutine(SmoothMove(transform.position, newPos, timeOfMoving));
+        MoveCardTo(newPos, timeOfMoving);
     }
 
     public void MoveCardTo(Vector3 newPos, float seconds)
     {
-        StartCoroutine(SmoothMove(transform.position, newPos, seconds));
-    }
-
-
-    IEnumerator SmoothMove(Vector3 startPos, Vector3 endPos, float seconds)
-    {
-        float t = 0f;
-        while (t <= 1f)
-        {
-            t += Time.deltaTime / seconds;
-            transform.position = Vector3.Lerp(startPos, endPos, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
+        MovingAnimations.instance.MoveObjTo(gameObject, newPos, seconds);
     }
 
 
     public void RotateTo(Quaternion newRot)
     {
-        StartCoroutine(SmoothRotation(transform.rotation, newRot, timeOfMoving));
+        RotateTo(newRot, timeOfMoving);
     }
 
 
     public void RotateTo(Quaternion newRot, float seconds)
     {
-        StartCoroutine(SmoothRotation(transform.rotation, newRot, seconds));
-    }
-
-
-    IEnumerator SmoothRotation(Quaternion startRot, Quaternion endRot, float seconds)
-    {
-        float t = 0f;
-        while (t <= 1f)
-        {
-            t += Time.deltaTime / seconds;
-            transform.rotation = Quaternion.Slerp(startRot, endRot, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
+        MovingAnimations.instance.RotateTo(gameObject, newRot, seconds);
     }
 
 
@@ -140,34 +115,7 @@ public class CardBehaviour : MonoBehaviour
 
     public void MakePulse(float seconds)
     {
-        StartCoroutine(MakePulseCoroutine(seconds));
-    }
-
-
-    IEnumerator MakePulseCoroutine(float seconds)
-    {
-        Vector3 biggerScale = transform.localScale;
-        Vector3 smallerScale = transform.localScale;
-
-        smallerScale.x *= PULSE_SKALER;
-        smallerScale.y *= PULSE_SKALER;
-        smallerScale.z *= PULSE_SKALER;
-
-        StartCoroutine(SmoothScaleChanging(biggerScale, smallerScale, seconds / 2));
-        yield return new WaitForSeconds(seconds / 2);
-        StartCoroutine(SmoothScaleChanging(smallerScale, biggerScale, seconds / 2));
-    }
-
-
-    IEnumerator SmoothScaleChanging(Vector3 oldScale, Vector3 newScale, float seconds)
-    {
-        float t = 0f;
-        while (t <= 1f)
-        {
-            t += Time.deltaTime / seconds;
-            transform.localScale = Vector3.Lerp(oldScale, newScale, Mathf.SmoothStep(0f, 1f, t));
-            yield return null;
-        }
+        MovingAnimations.instance.MakePulse(gameObject, PULSE_SCALER, seconds);
     }
 
 

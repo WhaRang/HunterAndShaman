@@ -108,16 +108,58 @@ public class MiddleActionManager : MonoBehaviour
         aiCard.FlipCard(positioningTime);
         personCard.FlipCard(positioningTime);
         yield return new WaitForSeconds(positioningTime * 2);
-        personCard.MakePulse();
-        horseCard.AffectOnHorse(personCard);
-        yield return new WaitForSeconds(positioningTime * 2);
-        aiCard.MakePulse();
-        horseCard.AffectOnHorse(aiCard);
-        yield return new WaitForSeconds(positioningTime * 2);
+        StartCoroutine(ManageMoves());
+        yield return new WaitForSeconds(positioningTime * 4);
         FlushCards();
         yield return new WaitForSeconds(positioningTime);
         LateAction();
         yield return new WaitForSeconds(positioningTime);
+    }
+
+
+    IEnumerator ManageMoves()
+    {
+        if (personCard.cardType == CardBehaviour.CARD_TYPE.CHANGE_ROLE)
+        {
+            personCard.MakePulse();
+            yield return new WaitForSeconds(positioningTime * 2);
+        }
+
+        if (aiCard.cardType == CardBehaviour.CARD_TYPE.CHANGE_ROLE)
+        {
+            aiCard.MakePulse();
+            yield return new WaitForSeconds(positioningTime * 2);
+        }
+
+        if (personCard.cardColor == horseCard.GetColor())
+        {
+            personCard.MakePulse();
+            horseCard.AffectOnHorse(personCard);
+            yield return new WaitForSeconds(positioningTime * 2);
+        }
+
+        if (aiCard.cardColor == horseCard.GetColor())
+        {
+            aiCard.MakePulse();
+            horseCard.AffectOnHorse(aiCard);
+            yield return new WaitForSeconds(positioningTime * 2);
+        }
+
+        if (personCard.cardColor != horseCard.GetColor()
+            && personCard.cardType != CardBehaviour.CARD_TYPE.CHANGE_ROLE)
+        {
+            personCard.MakePulse();
+            horseCard.AffectOnHorse(personCard);
+            yield return new WaitForSeconds(positioningTime * 2);
+        }
+
+        if (aiCard.cardColor != horseCard.GetColor()
+            && aiCard.cardType != CardBehaviour.CARD_TYPE.CHANGE_ROLE)
+        {
+            aiCard.MakePulse();
+            horseCard.AffectOnHorse(aiCard);
+            yield return new WaitForSeconds(positioningTime * 2);
+        }
     }
 
 
