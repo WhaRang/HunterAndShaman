@@ -146,7 +146,7 @@ public class GameStateMachine : MonoBehaviour
     {
         personsHand.DrawCards();
         aiHand.DrawCards();
-        HorseDeck.deck.DrawCard();
+        MiddleActionManager.manager.DrawHorseCard();
     }
 
 

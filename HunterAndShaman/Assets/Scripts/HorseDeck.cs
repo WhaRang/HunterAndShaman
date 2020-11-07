@@ -79,17 +79,20 @@ public class HorseDeck : MonoBehaviour
     }
 
 
-    public void DrawCard()
+    public CardBehaviour DrawCard()
     {
         if (curr_card >= DECK_SIZE)
         {
-            return;
+            return null;
         }
 
-        cards[DECK_SIZE - curr_card - 1].MoveCardTo(Vector3.zero);
-        cards[DECK_SIZE - curr_card - 1].FlipCard();
-
         curr_card++;
+
+        cards[DECK_SIZE - curr_card].MoveCardTo(Vector3.zero);
+        cards[DECK_SIZE - curr_card].FlipCard();
+
+        return cards[DECK_SIZE - curr_card];
+
     }
 
 

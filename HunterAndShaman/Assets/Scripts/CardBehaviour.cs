@@ -1,11 +1,27 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 public class CardBehaviour : MonoBehaviour
 {
+    public enum CARD_COLOR 
+    { 
+        RED,
+        BLACK,
+        DOUBLE
+    }
+
+    public enum CARD_TYPE
+    {
+        ORDINARY,
+        CHANGE_ROLE,
+        HORSE
+    }
+
+    public CARD_COLOR cardColor;
+    public CARD_TYPE cardType;
+
     Image cardImage;
     bool isFlipped;
     bool isChoosed;
@@ -15,6 +31,8 @@ public class CardBehaviour : MonoBehaviour
     public Sprite frontSprite;
 
     public static float timeOfMoving = 0.5f;
+
+    const float PULSE_SKALER = 1.2f;
 
 
     private void Start()
@@ -114,6 +132,45 @@ public class CardBehaviour : MonoBehaviour
     }
 
 
+    public void MakePulse()
+    {
+        MakePulse(timeOfMoving);
+    }
+
+
+    public void MakePulse(float seconds)
+    {
+        StartCoroutine(MakePulseCoroutine(seconds));
+    }
+
+
+    IEnumerator MakePulseCoroutine(float seconds)
+    {
+        Vector3 biggerScale = transform.localScale;
+        Vector3 smallerScale = transform.localScale;
+
+        smallerScale.x *= PULSE_SKALER;
+        smallerScale.y *= PULSE_SKALER;
+        smallerScale.z *= PULSE_SKALER;
+
+        StartCoroutine(SmoothScaleChanging(biggerScale, smallerScale, seconds / 2));
+        yield return new WaitForSeconds(seconds / 2);
+        StartCoroutine(SmoothScaleChanging(smallerScale, biggerScale, seconds / 2));
+    }
+
+
+    IEnumerator SmoothScaleChanging(Vector3 oldScale, Vector3 newScale, float seconds)
+    {
+        float t = 0f;
+        while (t <= 1f)
+        {
+            t += Time.deltaTime / seconds;
+            transform.localScale = Vector3.Lerp(oldScale, newScale, Mathf.SmoothStep(0f, 1f, t));
+            yield return null;
+        }
+    }
+
+
     public void OnClick()
     {
         if (!isClickable)
@@ -147,5 +204,11 @@ public class CardBehaviour : MonoBehaviour
     public void SetClickable(bool clickable)
     {
         isClickable = clickable;
+    }
+
+
+    public void SetSprite(Sprite newSprite)
+    {
+        cardImage.sprite = newSprite;
     }
 }

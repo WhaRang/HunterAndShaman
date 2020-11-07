@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3529703959686437301}
   - component: {fileID: 4416344317651627685}
   - component: {fileID: 4642382449941843962}
+  - component: {fileID: 445879822496462187}
   m_Layer: 5
   m_Name: BlackHorseCard
   m_TagString: Untagged
@@ -87,5 +88,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a509cdd692e7f8a43b8e9a03866eb055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardColor: 1
+  cardType: 2
   backSprite: {fileID: 21300000, guid: 252e156cc0510a342af1c1edfea3fc82, type: 3}
-  frontSprite: {fileID: 21300000, guid: 1c37d36502fed204cbdbf78d4d17789d, type: 3}
+  frontSprite: {fileID: 21300000, guid: a2ad12617d0eb1041a5faae1959cf276, type: 3}
+--- !u!114 &445879822496462187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6903425057172361834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0491f89a638375c4ba0173655d3ce51b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health_02: {fileID: 21300000, guid: 3f04c36a496d66e4c823ab6a2c2c02e4, type: 3}
+  health_12: {fileID: 21300000, guid: a2ad12617d0eb1041a5faae1959cf276, type: 3}
+  health_22: {fileID: 21300000, guid: 10f78092f1438584e84f9f03a2c3565a, type: 3}

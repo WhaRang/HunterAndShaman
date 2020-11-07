@@ -15,6 +15,8 @@ public class MiddleActionManager : MonoBehaviour
     CardBehaviour personCard;
     CardBehaviour aiCard;
 
+    HorseCard horseCard;
+
     Vector3 aiCardPos = new Vector3(0.0f, 350.0f, 0.0f);
     Vector3 personCardPos = new Vector3(0.0f, -350.0f, 0.0f);
 
@@ -106,6 +108,12 @@ public class MiddleActionManager : MonoBehaviour
         aiCard.FlipCard(positioningTime);
         personCard.FlipCard(positioningTime);
         yield return new WaitForSeconds(positioningTime * 2);
+        personCard.MakePulse();
+        horseCard.AffectOnHorse(personCard);
+        yield return new WaitForSeconds(positioningTime * 2);
+        aiCard.MakePulse();
+        horseCard.AffectOnHorse(aiCard);
+        yield return new WaitForSeconds(positioningTime * 2);
         FlushCards();
         yield return new WaitForSeconds(positioningTime);
         LateAction();
@@ -143,5 +151,12 @@ public class MiddleActionManager : MonoBehaviour
     {
         isPersonMoved = false;
         isAiMoved = false;
+    }
+
+
+    public void DrawHorseCard()
+    {
+        CardBehaviour tempCard =  HorseDeck.deck.DrawCard();
+        horseCard = tempCard.gameObject.GetComponent<HorseCard>();
     }
 }
