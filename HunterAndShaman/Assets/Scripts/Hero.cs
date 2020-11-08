@@ -19,7 +19,16 @@ public class Hero : MonoBehaviour
 
     public Vector3 changingPos;
 
-    float timeOfChanging = 0.5f;
+    float timeOfChanging = CardBehaviour.timeOfMoving;
+
+
+    public void SetHero(HEROES newHeroType)
+    {
+        if (newHeroType != heroType)
+        {
+            ChangeHero();
+        }
+    }
 
 
     public void ChangeHero()

@@ -92,4 +92,10 @@ public class HorseCard : MonoBehaviour
     {
         return cardBehaviour.cardColor;
     }
+
+
+    public int GetHelath()
+    {
+        return health;
+    }
 }

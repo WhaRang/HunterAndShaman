@@ -208,4 +208,10 @@ public class MiddleActionManager : MonoBehaviour
         CardBehaviour tempCard =  HorseDeck.deck.DrawCard();
         horseCard = tempCard.gameObject.GetComponent<HorseCard>();
     }
+
+
+    public HorseCard GetHorse()
+    {
+        return horseCard;
+    }
 }

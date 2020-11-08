@@ -302,4 +302,10 @@ public class PlayersHand : MonoBehaviour
 
         return null;
     }
+
+
+    public CardBehaviour GetChangeRolesCard()
+    {
+        return changeRolesCard;
+    }
 }

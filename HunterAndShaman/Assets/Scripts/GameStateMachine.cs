@@ -12,13 +12,14 @@ public class GameStateMachine : MonoBehaviour
         DRAW_CARDS,
         MIX_CARDS,
         MOVES,
+        END_ROUND,
         DISCARD_CARDS,
     }
 
     public PlayersHand personsHand;
     public PlayersHand aiHand;
 
-    const float DELTA_PAUSE = 0.5f;
+    const float DELTA_PAUSE = 0.2f;
     const int TOTAL_ROUNDS = 4;
 
     int curr_round = 1;
@@ -95,6 +96,13 @@ public class GameStateMachine : MonoBehaviour
             case STAGE.MOVES:
                 {
                     MakeMoves();                    
+                    curr_stage = STAGE.END_ROUND;
+                    canMove = false;
+                    break;
+                }
+            case STAGE.END_ROUND:
+                {
+                    EndRound();
                     curr_stage = STAGE.DISCARD_CARDS;
                     canMove = false;
                     break;
@@ -103,7 +111,6 @@ public class GameStateMachine : MonoBehaviour
                 {
                     if (curr_round < TOTAL_ROUNDS)
                     {
-                        HorseDeck.deck.DiscardCurrentCard();
                         curr_round++;
                         curr_stage = STAGE.DRAW_CARDS;
                         break;
@@ -117,6 +124,13 @@ public class GameStateMachine : MonoBehaviour
                     break;
                 }
         }
+    }
+
+
+    void EndRound()
+    {
+        CardBehaviour horseCard = MiddleActionManager.manager.GetHorse().GetComponent<CardBehaviour>();
+        EndRoundManager.manager.ManageScore(horseCard, personsHand.GetChangeRolesCard(), aiHand.GetChangeRolesCard());
     }
 
 
@@ -154,7 +168,6 @@ public class GameStateMachine : MonoBehaviour
     {
         personsHand.DiscardCards();
         aiHand.DiscardCards();
-        HorseDeck.deck.DiscardCurrentCard();
         MainDeck.deck.DiscardAll();
         ChangeRolesDeck.deck.DiscardAll();
     }
