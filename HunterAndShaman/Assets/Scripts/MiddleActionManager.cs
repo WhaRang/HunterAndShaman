@@ -6,6 +6,9 @@ public class MiddleActionManager : MonoBehaviour
 {
     public static MiddleActionManager manager;
 
+    public Hero personHero;
+    public Hero aiHero;
+
     const int TOTAL_MOVES = 3;
     int curr_move;
 
@@ -122,12 +125,16 @@ public class MiddleActionManager : MonoBehaviour
         if (personCard.cardType == CardBehaviour.CARD_TYPE.CHANGE_ROLE)
         {
             personCard.MakePulse();
+            personHero.ChangeHero();
+            aiHero.ChangeHero();
             yield return new WaitForSeconds(positioningTime * 2);
         }
 
         if (aiCard.cardType == CardBehaviour.CARD_TYPE.CHANGE_ROLE)
         {
             aiCard.MakePulse();
+            aiHero.ChangeHero();
+            personHero.ChangeHero();
             yield return new WaitForSeconds(positioningTime * 2);
         }
 
