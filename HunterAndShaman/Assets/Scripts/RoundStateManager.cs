@@ -20,6 +20,9 @@ public class RoundStateManager : MonoBehaviour
     int curr_round;
     ROUND_STATES curr_state;
 
+    int personRoundScore;
+    int aiRoundScore;
+
 
     private void Awake()
     {
@@ -33,6 +36,8 @@ public class RoundStateManager : MonoBehaviour
         curr_round = 1;
         pauseTime = Banner.lifeTime;
         curr_state = ROUND_STATES.FIRST_ROUND;
+        personRoundScore = 0;
+        aiRoundScore = 0;
         ManageState();
     }
 
@@ -74,19 +79,35 @@ public class RoundStateManager : MonoBehaviour
 
     void ManageRound()
     {
-        StartCoroutine(ManageRoundCoroutine());  
+        if (!CheckIfNotTheEnd())
+            StartCoroutine(ManageRoundCoroutine());  
     }
 
 
     IEnumerator ManageRoundCoroutine()
     {
-        bannerPrefab.SetText("Round " + curr_round);
-        Banner obj = Instantiate(bannerPrefab);
-        obj.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+        bannerPrefab.SetText("Round " + curr_round + "\n" + personRoundScore + " - " + aiRoundScore);
+        Banner rndBanner = Instantiate(bannerPrefab);
+        rndBanner.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+
         curr_round++;
         yield return new WaitForSeconds(pauseTime);
         GameStateMachine.machine.StartMove();
     }
+
+
+    bool CheckIfNotTheEnd()
+    {
+        if (personRoundScore >= 2 || aiRoundScore >= 2)
+        {
+            curr_state = ROUND_STATES.RESULT;
+            ManageState();
+            return true;
+        }
+
+        return false;
+    }
+
 
 
     void Result()
@@ -97,9 +118,54 @@ public class RoundStateManager : MonoBehaviour
 
     IEnumerator ResultCoroutine()
     {
-        bannerPrefab.SetText("Good game!");
+        string additionalStr = GetAdditionalString();
+
+        bannerPrefab.SetText(additionalStr + "\n" + personRoundScore + " - " + aiRoundScore);
         Banner obj = Instantiate(bannerPrefab);
         obj.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
         yield return new WaitForSeconds(pauseTime);
+    }
+
+
+    string GetAdditionalString()
+    {
+        string additionalString = "";
+
+        if (personRoundScore > aiRoundScore)
+        {
+            additionalString = "You win!";
+        }
+
+        if (aiRoundScore > personRoundScore)
+        {
+            additionalString = "You lose!";
+        }
+
+        if (aiRoundScore == personRoundScore)
+        {
+            additionalString = "Draw!";
+        }
+
+        return additionalString;
+    }
+
+
+    public void ProcessRoundScore(int personScore, int aiScore)
+    {
+        if (personScore > aiScore)
+        {
+            personRoundScore++;
+        }
+
+        if (aiScore > personScore)
+        {
+            aiRoundScore++;
+        }
+
+        if (aiScore == personScore)
+        {
+            aiRoundScore++;
+            personRoundScore++;
+        }
     }
 }

@@ -123,6 +123,7 @@ public class GameStateMachine : MonoBehaviour
                         curr_round = 1;
                     }
                     DiscardCardsForEveryone();
+                    RoundStateManager.manager.ProcessRoundScore(personScore.GetScore(), aiScore.GetScore());
                     RoundStateManager.manager.ManageState();
                     curr_stage = STAGE.SPAWN_CARDS;
                     canMove = false;
