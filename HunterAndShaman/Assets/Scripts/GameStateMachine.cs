@@ -17,7 +17,10 @@ public class GameStateMachine : MonoBehaviour
     }
 
     public PlayersHand personsHand;
-    public PlayersHand aiHand;
+    public PlayersHand aiHand; 
+
+    public ScoreManager personScore;
+    public ScoreManager aiScore;
 
     const float DELTA_PAUSE = 0.2f;
     const int TOTAL_ROUNDS = 4;
@@ -49,7 +52,7 @@ public class GameStateMachine : MonoBehaviour
         pause = singlePause;
         curr_stage = STAGE.SPAWN_CARDS;
         counter = pause;
-        canMove = true;
+        canMove = false;
     }
 
 
@@ -120,7 +123,9 @@ public class GameStateMachine : MonoBehaviour
                         curr_round = 1;
                     }
                     DiscardCardsForEveryone();
+                    RoundStateManager.manager.ManageState();
                     curr_stage = STAGE.SPAWN_CARDS;
+                    canMove = false;
                     break;
                 }
         }
@@ -129,8 +134,10 @@ public class GameStateMachine : MonoBehaviour
 
     void EndRound()
     {
-        CardBehaviour horseCard = MiddleActionManager.manager.GetHorse().GetComponent<CardBehaviour>();
-        EndRoundManager.manager.ManageScore(horseCard, personsHand.GetChangeRolesCard(), aiHand.GetChangeRolesCard());
+        CardBehaviour horseCard =
+            MiddleActionManager.manager.GetHorse().GetComponent<CardBehaviour>();
+        EndRaffleManager.manager.ManageScore(horseCard,
+            personsHand.GetChangeRolesCard(), aiHand.GetChangeRolesCard());
     }
 
 
@@ -150,6 +157,8 @@ public class GameStateMachine : MonoBehaviour
 
     void SpawnCards()
     {
+        personScore.ZeroScore();
+        aiScore.ZeroScore();
         HorseDeck.deck.SpawnDeck();
         MainDeck.deck.SpawnDeck();
         ChangeRolesDeck.deck.SpawnDeck();
@@ -176,6 +185,12 @@ public class GameStateMachine : MonoBehaviour
     public void StartMove()
     {
         canMove = true;
+    }
+
+
+    public void SkipPause()
+    {
+        counter = pause;
     }
 
 

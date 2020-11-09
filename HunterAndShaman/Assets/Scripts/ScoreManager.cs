@@ -25,4 +25,10 @@ public class ScoreManager : MonoBehaviour
     {
         score += scoreToAdd;
     }
+
+
+    public void ZeroScore()
+    {
+        score = 0;
+    }
 }

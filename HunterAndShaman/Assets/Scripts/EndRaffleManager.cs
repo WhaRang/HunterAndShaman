@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndRoundManager : MonoBehaviour
+public class EndRaffleManager : MonoBehaviour
 {
-    public static EndRoundManager manager;
+    public static EndRaffleManager manager;
 
     public ScoreManager personScore;
     public ScoreManager aiScore;
@@ -24,7 +24,7 @@ public class EndRoundManager : MonoBehaviour
     private void Awake()
     {
         if (manager == null)
-            manager = this.gameObject.GetComponent<EndRoundManager>();
+            manager = this.gameObject.GetComponent<EndRaffleManager>();
     }
 
 
@@ -54,27 +54,29 @@ public class EndRoundManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f * timeOfManaging);
 
         if (personChangeRoleCard != null)
-            StartCoroutine(ChangeRolesCardCoroutine(isPersonWin, personWinningPos, personChangeRoleCard));
+            StartCoroutine(ChangeRolesCardCoroutine(true, personWinningPos, personChangeRoleCard));
 
         if (aiChangeRoleCard != null)
         {
             aiChangeRoleCard.FlipCard();
-            StartCoroutine(ChangeRolesCardCoroutine(isPersonWin, aiWinningPos, aiChangeRoleCard));
+            StartCoroutine(ChangeRolesCardCoroutine(false, aiWinningPos, aiChangeRoleCard));
         }
 
         if (personChangeRoleCard != null || aiChangeRoleCard != null)
-            yield return new WaitForSeconds(timeOfManaging);
+        {
+            yield return new WaitForSeconds(timeOfManaging / 2);
+        }
 
         GameStateMachine.machine.StartMove();
     }
 
 
-    IEnumerator ChangeRolesCardCoroutine(bool isPersonWin, Vector3 pos, CardBehaviour card)
+    IEnumerator ChangeRolesCardCoroutine(bool addScoreToPerson, Vector3 pos, CardBehaviour card)
     {
         MovingAnimations.instance.MoveObjTo(card.gameObject, pos, timeOfManaging / 2);
         yield return new WaitForSeconds(timeOfManaging / 2);
 
-        if (isPersonWin)
+        if (addScoreToPerson)
         {
             personScore.AddScore(SCORE_FOR_CH_CARD);
         }

@@ -1327,7 +1327,7 @@ GameObject:
   - component: {fileID: 526997397}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2264,6 +2264,7 @@ GameObject:
   - component: {fileID: 1202629004}
   - component: {fileID: 1202629006}
   - component: {fileID: 1202629007}
+  - component: {fileID: 1202629008}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2285,6 +2286,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   personsHand: {fileID: 849587327}
   aiHand: {fileID: 1303625849}
+  personScore: {fileID: 2923817160652406628}
+  aiScore: {fileID: 138394727}
 --- !u!4 &1202629005
 Transform:
   m_ObjectHideFlags: 0
@@ -2329,6 +2332,20 @@ MonoBehaviour:
   aiHero: {fileID: 1346258203}
   personWinningPos: {x: 0, y: -350, z: 0}
   aiWinningPos: {x: 0, y: 350, z: 0}
+--- !u!114 &1202629008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202629003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c7cca44c9dbdaf4b879861d2ab1f287, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bannerPrefab: {fileID: 9103145667617248857, guid: ed61f7f857d950949a650c63357407cd,
+    type: 3}
 --- !u!1001 &1210411843
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3657,7 +3674,7 @@ PrefabInstance:
     - target: {fileID: 2287316371717060758, guid: 766458af5562a1e49b078f2911ddbcae,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 118.75
+      value: 119
       objectReference: {fileID: 0}
     - target: {fileID: 2287316371717060758, guid: 766458af5562a1e49b078f2911ddbcae,
         type: 3}
