@@ -52,16 +52,11 @@ public class PlayersHand : MonoBehaviour
 
     public void DrawCards()
     {
-        if (firstCard != null || secondCard != null
-            || thirdCard != null || changeRolesCard != null)
-        {
-            DrawNeededCards();
-        }
-        else
-        {
+        if (AllIsNull())
             DrawCardsOneByOne();
-            InitializeAvailablePositions();
-        }
+        else
+            DrawCardsNeeded();
+        InitializeAvailablePositions();
 
         if (shouldFlip)
         {
@@ -213,6 +208,31 @@ public class PlayersHand : MonoBehaviour
     }
 
 
+    void DrawCardsNeeded()
+    {
+        if (secondCard != null)
+        {
+            firstCard = secondCard;
+        }
+
+        if (thirdCard != null)
+        {
+            firstCard = thirdCard;
+        }
+
+        firstCard.MoveCardTo(firstCardPos);
+
+        secondCard = MainDeck.deck.DrawCard();
+        secondCard.MoveCardTo(secondCardPos);
+
+        thirdCard = MainDeck.deck.DrawCard();
+        thirdCard.MoveCardTo(thirdCardPos);
+
+        changeRolesCard = ChangeRolesDeck.deck.DrawCard();
+        changeRolesCard.MoveCardTo(changeRolesCardPos);
+    }
+
+
     void DrawCardsOneByOne()
     {
         if (firstCard == null)
@@ -234,47 +254,6 @@ public class PlayersHand : MonoBehaviour
         {
             changeRolesCard = ChangeRolesDeck.deck.DrawCard();
             changeRolesCard.MoveCardTo(changeRolesCardPos);
-        }
-    }
-
-
-    void DrawNeededCards()
-    {
-        Vector3 takenPosition = availablePositions[0];
-        InitializeAvailablePositions();
-
-        int posNum = 0;
-
-        if (firstCard == null)
-        {
-            firstCard = MainDeck.deck.DrawCard();
-            if (availablePositions[posNum] == takenPosition)
-                posNum++;
-            firstCard.MoveCardTo(availablePositions[posNum]);
-            posNum++;
-        }
-        if (secondCard == null)
-        {
-            secondCard = MainDeck.deck.DrawCard();
-            if (availablePositions[posNum] == takenPosition)
-                posNum++;
-            secondCard.MoveCardTo(availablePositions[posNum]);
-            posNum++;
-        }
-        if (thirdCard == null)
-        {
-            thirdCard = MainDeck.deck.DrawCard();
-            if (availablePositions[posNum] == takenPosition)
-                posNum++;
-            thirdCard.MoveCardTo(availablePositions[posNum]);
-            posNum++;
-        }
-        if (changeRolesCard == null)
-        {
-            changeRolesCard = ChangeRolesDeck.deck.DrawCard();
-            if (availablePositions[posNum] == takenPosition)
-                posNum++;
-            changeRolesCard.MoveCardTo(availablePositions[posNum]);
         }
     }
 
@@ -356,5 +335,14 @@ public class PlayersHand : MonoBehaviour
     public CardBehaviour GetChangeRolesCard()
     {
         return changeRolesCard;
+    }
+
+
+    bool AllIsNull()
+    {
+        return (firstCard == null) &&
+               (secondCard == null) &&
+               (thirdCard == null) &&
+               (changeRolesCard == null);
     }
 }

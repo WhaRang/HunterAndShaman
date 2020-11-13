@@ -124,6 +124,10 @@ public class RoundStateManager : MonoBehaviour
         Banner obj = Instantiate(bannerPrefab);
         obj.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
         yield return new WaitForSeconds(pauseTime);
+        personRoundScore = 0;
+        aiRoundScore = 0;
+        curr_round = 0;
+        ManageState();
     }
 
 
